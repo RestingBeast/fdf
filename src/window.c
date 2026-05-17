@@ -1,0 +1,38 @@
+#include "fdf.h"
+
+static int key_handler(int keycode, t_data *data)
+{
+    if (keycode == 65307)  // ESC on Linux
+    {
+        mlx_destroy_image(data->mlx, data->image->img);
+        mlx_destroy_window(data->mlx, data->win);
+        mlx_destroy_display(data->mlx);
+        free(data->image);
+        free(data->mlx);
+        exit(0);
+    }
+    return (0);
+}
+
+static int close_handler(t_data *data)
+{
+    mlx_destroy_image(data->mlx, data->image->img);
+    mlx_destroy_window(data->mlx, data->win);
+    mlx_destroy_display(data->mlx);
+        free(data->image);
+    free(data->mlx);
+    exit(0);
+}
+
+void init_window(t_data *data, int width, int height, char *title)
+{
+    data->image = init_image(data->mlx, width, height);
+    if (!data->image)
+    {
+        free(data->mlx);
+        exit(1);
+    }
+    data->win = mlx_new_window(data->mlx, width, height, title);
+    mlx_key_hook(data->win, key_handler, data);
+    mlx_hook(data->win, 17, 0, close_handler, data); 
+}
