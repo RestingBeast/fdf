@@ -1,18 +1,21 @@
 #include "fdf.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
     t_data  data;
-	int		x;
-	int		y;
+	t_map	map;
 
+	if (argc != 2)
+		return (1);
+	init_map(&map, argv[1]);
+	parse_map(&map, argv[1]);
     data.mlx = mlx_init();
+	data.map = &map;
     init_window(&data, 700, 700, "Hello, World");
-	
-	x = 0;
+	int x = 0;
 	while (x < 300)
 	{
-		y = 0;
+		int y = 0;
 		while (y < 300)
 		{
 			my_mlx_pixel_put(data.image, 200 + x, 200 + y, 0x2f4f4f);

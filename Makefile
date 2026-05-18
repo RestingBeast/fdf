@@ -3,14 +3,20 @@ CFLAGS = -Wall -Wextra -Werror
 MAKE = make
 FTPRINTF_DIR = ftprintf
 FTPRINTF = $(FTPRINTF_DIR)/libftprintf.a
+GNL_DIR = get-next-line
 MINILIBX_DIR = minilibx-linux
 MINILIBX = $(MINILIBX_DIR)/libmlx.a
-INCLUDE = -Iinclude -I$(FTPRINTF_DIR) -I$(MINILIBX_DIR)
+INCLUDE = -Iinclude -I$(FTPRINTF_DIR) -I$(GNL_DIR) -I$(MINILIBX_DIR)
 
 NAME = fdf
 SRC = src/fdf.c \
 	  src/image.c \
-	  src/window.c
+	  src/window.c \
+	  src/map.c \
+	  src/map_utils.c \
+	  src/utils.c \
+	  $(GNL_DIR)/get_next_line.c \
+	  $(GNL_DIR)/get_next_line_utils.c 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)

@@ -1,27 +1,28 @@
 #include "fdf.h"
 
+static int close_handler(t_data *data)
+{
+    if (data->map)
+    {
+        free_2d_arr((void **)data->map->z_indices);
+        free_2d_arr((void **)data->map->colors);
+    }
+    if (data->image)
+        mlx_destroy_image(data->mlx, data->image->img);
+    mlx_destroy_window(data->mlx, data->win);
+    mlx_destroy_display(data->mlx);
+    free(data->image);
+    free(data->mlx);
+    exit(0);
+}
+
 static int key_handler(int keycode, t_data *data)
 {
     if (keycode == 65307)  // ESC on Linux
     {
-        mlx_destroy_image(data->mlx, data->image->img);
-        mlx_destroy_window(data->mlx, data->win);
-        mlx_destroy_display(data->mlx);
-        free(data->image);
-        free(data->mlx);
-        exit(0);
+        close_handler(data);
     }
     return (0);
-}
-
-static int close_handler(t_data *data)
-{
-    mlx_destroy_image(data->mlx, data->image->img);
-    mlx_destroy_window(data->mlx, data->win);
-    mlx_destroy_display(data->mlx);
-        free(data->image);
-    free(data->mlx);
-    exit(0);
 }
 
 void init_window(t_data *data, int width, int height, char *title)
