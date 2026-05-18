@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkhant-z <kkhant-z@student.42singapor>     #+#  +:+       +#+        */
+/*   By: kkhant-z <kkhant-z@student.42singapore.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026-05-18 05:32:48 by kkhant-z          #+#    #+#             */
-/*   Updated: 2026-05-18 05:32:48 by kkhant-z         ###   ########.fr       */
+/*   Created: 2026/05/18 05:32:48 by kkhant-z          #+#    #+#             */
+/*   Updated: 2026/05/18 20:52:05 by kkhant-z         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	init_map(t_map *map, char *mapfile)
 	map->height = 0;
 }
 
-static void	parse_z_and_color(t_map *map, char **content, int curr_i)
+static void	parse_z_and_color(t_map *map, char **content, int curr_i, int fd)
 {
 	char	*comma;
 	char	*z_index;
@@ -65,25 +65,25 @@ static void	parse_z_and_color(t_map *map, char **content, int curr_i)
 
 	comma = ft_strchr(content[curr_i], ',');
 	if (comma && (ft_strlen(comma) == 1 || content[curr_i][0] == ','))
-		map_error(map, content, "Invalid map format");
+		map_error(map, content, "Invalid map format", fd);
 	i = 0;
 	if (content[curr_i][i] == '-' || content[curr_i][i] == '+')
 		i++;
 	while (content[curr_i][i] != '\0' && content[curr_i][i] != ',')
 	{
 		if (!ft_isdigit(content[curr_i][i]))
-			map_error(map, content, "Invalid map format");
+			map_error(map, content, "Invalid map format", fd);
 		i++;
 	}
 	z_index = extract_z_index(content[curr_i]);
 	if (!z_index)
-		map_error(map, content, "Invalid map format");
+		map_error(map, content, "Invalid map format", fd);
 	map->z_indices[map->height][curr_i] = ft_atoi(z_index);
-	map->colors[map->height][curr_i] = extract_color(map, content, comma);
+	map->colors[map->height][curr_i] = extract_color(map, content, comma, fd);
 	free(z_index);
 }
 
-static void	process_line(t_map *map, char **content)
+static void	process_line(t_map *map, char **content, int fd)
 {
 	int	i;
 
@@ -91,12 +91,12 @@ static void	process_line(t_map *map, char **content)
 	while (content[i] != NULL)
 	{
 		if (i >= map->width)
-			map_error(map, content, "Invalid map format");
-		parse_z_and_color(map, content, i);
+			map_error(map, content, "Invalid map format", fd);
+		parse_z_and_color(map, content, i, fd);
 		i++;
 	}
 	if (i != map->width)
-		map_error(map, content, "Invalid map format");
+		map_error(map, content, "Invalid map format", fd);
 	map->height += 1;
 }
 
@@ -108,16 +108,16 @@ void	parse_map(t_map *map, char *mapfile)
 
 	fd = open(mapfile, O_RDONLY);
 	if (fd == -1)
-		map_error(map, NULL, strerror(errno));
+		map_error(map, NULL, strerror(errno), 0);
 	line = get_next_line(fd);
 	if (line == NULL)
-		map_error(map, NULL, "Empty map");
+		map_error(map, NULL, "Empty map", fd);
 	while (line != NULL)
 	{
 		replace_new_line(line);
 		content = ft_split(line, ' ');
 		free(line);
-		process_line(map, content);
+		process_line(map, content, fd);
 		free_2d_arr((void **)content);
 		line = get_next_line(fd);
 	}

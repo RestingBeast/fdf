@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkhant-z <kkhant-z@student.42singapor>     #+#  +:+       +#+        */
+/*   By: kkhant-z <kkhant-z@student.42singapore.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026-05-18 02:51:47 by kkhant-z          #+#    #+#             */
-/*   Updated: 2026-05-18 02:51:47 by kkhant-z         ###   ########.fr       */
+/*   Created: 2026/05/18 02:51:47 by kkhant-z          #+#    #+#             */
+/*   Updated: 2026/05/18 20:51:53 by kkhant-z         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ void	parse_map(t_map *map, char *mapfile);
 
 /* map_utils.c */
 void	set_width_and_height(t_map *map, char *mapfile);
-void	map_error(t_map *map, char **content, char *message);
-int		extract_color(t_map *map, char **content, char *color);
+void	map_error(t_map *map, char **content, char *message, int fd);
+int		extract_color(t_map *map, char **content, char *color, int fd);
 char	*extract_z_index(char *str);
 
 /* render.c */
