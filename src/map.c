@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kkhant-z <kkhant-z@student.42singapor>     #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026-05-18 05:32:48 by kkhant-z          #+#    #+#             */
+/*   Updated: 2026-05-18 05:32:48 by kkhant-z         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 static int	**allocate_2d_arr(int height, int width)
 {
 	int	**res;
-	int	*arr;
 	int	i;
 
 	res = malloc((height + 1) * sizeof(int *));
@@ -26,46 +37,44 @@ static int	**allocate_2d_arr(int height, int width)
 	return (res);
 }
 
-void    init_map(t_map *map, char *mapFile)
+void	init_map(t_map *map, char *mapfile)
 {
-    int **z_indices;
-    int **colors;
+	int	**z_indices;
+	int	**colors;
 
-	set_width_and_height(map, mapFile);
+	set_width_and_height(map, mapfile);
 	z_indices = allocate_2d_arr(map->height, map->width);
-    if (!z_indices)
-        exit(1);
-    colors = allocate_2d_arr(map->height, map->width);
-    if (!colors)
-    {
-        free_2d_arr((void **)z_indices);
-        exit(1);
-    }
-    map->z_indices = z_indices;
-    map->colors = colors;
+	if (!z_indices)
+		fatal_error("malloc failed: z_indices");
+	colors = allocate_2d_arr(map->height, map->width);
+	if (!colors)
+	{
+		free_2d_arr((void **)z_indices);
+		fatal_error("malloc failed: colors");
+	}
+	map->z_indices = z_indices;
+	map->colors = colors;
 	map->height = 0;
 }
 
 static void	parse_z_and_color(t_map *map, char **content, int curr_i)
 {
-	int		i;
 	char	*comma;
 	char	*z_index;
+	int		i;
 
 	comma = ft_strchr(content[curr_i], ',');
-	if (comma && ft_strlen(comma) == 1)
+	if (comma && (ft_strlen(comma) == 1 || content[curr_i][0] == ','))
 		map_error(map, content);
-	if (comma && content[curr_i][0] == ',')
-		map_error(map, content);
-    i = 0;
-	if (i == 0 && (content[curr_i][i] == '-' || content[curr_i][i] == '+'))
-    	i++;
-    while (content[curr_i][i] != '\0' && content[curr_i][i] != ',' )
-    {
-        if (!ft_isdigit(content[curr_i][i]))
-            map_error(map, content);
-        i++;
-    }
+	i = 0;
+	if (content[curr_i][i] == '-' || content[curr_i][i] == '+')
+		i++;
+	while (content[curr_i][i] != '\0' && content[curr_i][i] != ',')
+	{
+		if (!ft_isdigit(content[curr_i][i]))
+			map_error(map, content);
+		i++;
+	}
 	z_index = extract_z_index(content[curr_i]);
 	if (!z_index)
 		map_error(map, content);
@@ -74,39 +83,45 @@ static void	parse_z_and_color(t_map *map, char **content, int curr_i)
 	free(z_index);
 }
 
-static void    process_line(t_map *map, char **content)
+static void	process_line(t_map *map, char **content)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (content[i] != NULL){	
-        parse_z_and_color(map, content, i);
-		i++;
-		if (i > map->width)
+	i = 0;
+	while (content[i] != NULL)
+	{
+		if (i >= map->width)
 			map_error(map, content);
-    }
+		parse_z_and_color(map, content, i);
+		i++;
+	}
+	if (i != map->width)
+		map_error(map, content);
 	map->height += 1;
 }
 
-void    parse_map(t_map *map, char *mapFile)
+void	parse_map(t_map *map, char *mapfile)
 {
-    int     fd;
-    char    *line;
+	int		fd;
+	char	*line;
 	char	**content;
 
-    fd = open(mapFile, O_RDONLY);
-    if (fd == -1)
-        exit(1);
-    line = get_next_line(fd);
-    while (line != NULL)
-    {
-		line[ft_strlen(line) - 1] = '\0';
+	fd = open(mapfile, O_RDONLY);
+	if (fd == -1)
+		fatal_error(mapfile);
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		if (line[ft_strlen(line) - 1] == '\n')
+			line[ft_strlen(line) - 1] = '\0';
+		if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\r')
+			line[ft_strlen(line) - 1] = '\0';
 		content = ft_split(line, ' ');
 		process_line(map, content);
 		free_2d_arr((void **)content);
-        free(line);
-        line = get_next_line(fd);
-    }
-    free(line);
+		free(line);
+		line = get_next_line(fd);
+	}
+	free(line);
 	close(fd);
 }

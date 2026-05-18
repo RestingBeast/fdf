@@ -15,6 +15,7 @@ SRC = src/fdf.c \
 	  src/map.c \
 	  src/map_utils.c \
 	  src/utils.c \
+	  src/render.c \
 	  $(GNL_DIR)/get_next_line.c \
 	  $(GNL_DIR)/get_next_line_utils.c 
 OBJ = $(SRC:.c=.o)
@@ -41,7 +42,6 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(FTPRINTF_DIR) $@
-	$(MAKE) -C $(MINILIBX_DIR) $@
 
 re:	fclean all
 
