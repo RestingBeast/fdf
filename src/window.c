@@ -1,18 +1,25 @@
 #include "fdf.h"
 
-static int close_handler(t_data *data)
+static void    cleanup(t_data *data)
 {
+    if (data->image)
+    {
+        mlx_destroy_image(data->mlx, data->image->img);
+        free(data->image);
+    }
     if (data->map)
     {
         free_2d_arr((void **)data->map->z_indices);
         free_2d_arr((void **)data->map->colors);
     }
-    if (data->image)
-        mlx_destroy_image(data->mlx, data->image->img);
     mlx_destroy_window(data->mlx, data->win);
     mlx_destroy_display(data->mlx);
-    free(data->image);
     free(data->mlx);
+}
+
+static int close_handler(t_data *data)
+{
+    cleanup(data);
     exit(0);
 }
 
@@ -20,7 +27,8 @@ static int key_handler(int keycode, t_data *data)
 {
     if (keycode == 65307)  // ESC on Linux
     {
-        close_handler(data);
+        cleanup(data);
+        exit(0);
     }
     return (0);
 }
