@@ -53,7 +53,7 @@ void	set_width_and_height(t_map *map, char *mapfile)
 	close(fd);
 }
 
-void	map_error(t_map *map, char **content)
+void	map_error(t_map *map, char **content, char *message)
 {
 	int	i;
 
@@ -66,7 +66,7 @@ void	map_error(t_map *map, char **content)
 			free(content[i++]);
 		free(content);
 	}
-	ft_printf("Invalid map format\n");
+	ft_printf("%s\n", message);
 	exit(1);
 }
 
@@ -78,7 +78,7 @@ int	extract_color(t_map *map, char **content, char *color)
 		return (0xffffff);
 	color++;
 	if (color[0] != '0' || (color[1] != 'x' && color[1] != 'X'))
-		map_error(map, content);
+		map_error(map, content, "Invalid map format");
 	res = 0;
 	color += 2;
 	while (*color != '\0')
@@ -90,7 +90,7 @@ int	extract_color(t_map *map, char **content, char *color)
 		else if (*color >= 'A' && *color <= 'F')
 			res = (res * 16) + (*color - 'A' + 10);
 		else
-			map_error(map, content);
+			map_error(map, content, "Invalid map format");
 		color++;
 	}
 	return (res);

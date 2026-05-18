@@ -65,19 +65,19 @@ static void	parse_z_and_color(t_map *map, char **content, int curr_i)
 
 	comma = ft_strchr(content[curr_i], ',');
 	if (comma && (ft_strlen(comma) == 1 || content[curr_i][0] == ','))
-		map_error(map, content);
+		map_error(map, content, "Invalid map format");
 	i = 0;
 	if (content[curr_i][i] == '-' || content[curr_i][i] == '+')
 		i++;
 	while (content[curr_i][i] != '\0' && content[curr_i][i] != ',')
 	{
 		if (!ft_isdigit(content[curr_i][i]))
-			map_error(map, content);
+			map_error(map, content, "Invalid map format");
 		i++;
 	}
 	z_index = extract_z_index(content[curr_i]);
 	if (!z_index)
-		map_error(map, content);
+		map_error(map, content, "Invalid map format");
 	map->z_indices[map->height][curr_i] = ft_atoi(z_index);
 	map->colors[map->height][curr_i] = extract_color(map, content, comma);
 	free(z_index);
@@ -91,12 +91,12 @@ static void	process_line(t_map *map, char **content)
 	while (content[i] != NULL)
 	{
 		if (i >= map->width)
-			map_error(map, content);
+			map_error(map, content, "Invalid map format");
 		parse_z_and_color(map, content, i);
 		i++;
 	}
 	if (i != map->width)
-		map_error(map, content);
+		map_error(map, content, "Invalid map format");
 	map->height += 1;
 }
 
@@ -108,10 +108,10 @@ void	parse_map(t_map *map, char *mapfile)
 
 	fd = open(mapfile, O_RDONLY);
 	if (fd == -1)
-		map_error(map, NULL);
+		map_error(map, NULL, strerror(errno));
 	line = get_next_line(fd);
 	if (line == NULL)
-		map_error(map, NULL);
+		map_error(map, NULL, "Empty map");
 	while (line != NULL)
 	{
 		replace_new_line(line);

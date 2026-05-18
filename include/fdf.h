@@ -18,6 +18,8 @@
 # include <unistd.h>
 # include <math.h>
 # include <stdio.h>
+# include <string.h>
+# include <errno.h>
 # include "ft_printf.h"
 # include "mlx.h"
 # include "get_next_line.h"
@@ -89,7 +91,7 @@ void	parse_map(t_map *map, char *mapfile);
 
 /* map_utils.c */
 void	set_width_and_height(t_map *map, char *mapfile);
-void	map_error(t_map *map, char **content);
+void	map_error(t_map *map, char **content, char *message);
 int		extract_color(t_map *map, char **content, char *color);
 char	*extract_z_index(char *str);
 
