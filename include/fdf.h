@@ -100,5 +100,6 @@ void	render(t_data *data);
 void	free_2d_arr(void **arr);
 void	cleanup(t_data *data);
 void	fatal_error(char *msg);
+void	replace_new_line(char *line);
 
 #endif

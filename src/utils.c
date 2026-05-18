@@ -44,3 +44,11 @@ void	fatal_error(char *msg)
 	perror(msg);
 	exit(1);
 }
+
+void	replace_new_line(char *line)
+{
+	if (line[ft_strlen(line) - 1] == '\n')
+		line[ft_strlen(line) - 1] = '\0';
+	if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\r')
+		line[ft_strlen(line) - 1] = '\0';
+}

@@ -108,18 +108,17 @@ void	parse_map(t_map *map, char *mapfile)
 
 	fd = open(mapfile, O_RDONLY);
 	if (fd == -1)
-		fatal_error(mapfile);
+		map_error(map, NULL);
 	line = get_next_line(fd);
+	if (line == NULL)
+		map_error(map, NULL);
 	while (line != NULL)
 	{
-		if (line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = '\0';
-		if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\r')
-			line[ft_strlen(line) - 1] = '\0';
+		replace_new_line(line);
 		content = ft_split(line, ' ');
+		free(line);
 		process_line(map, content);
 		free_2d_arr((void **)content);
-		free(line);
 		line = get_next_line(fd);
 	}
 	free(line);

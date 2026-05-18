@@ -66,7 +66,7 @@ void	map_error(t_map *map, char **content)
 			free(content[i++]);
 		free(content);
 	}
-	perror("Invalid map format");
+	ft_printf("Invalid map format\n");
 	exit(1);
 }
 

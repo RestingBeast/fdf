@@ -75,10 +75,7 @@ int	main(int argc, char **argv)
 	t_map	map;
 
 	if (argc != 2)
-	{
-		perror("Usage: ./fdf <map.fdf>");
-		return (1);
-	}
+		fatal_error("Usage: ./fdf <map.fdf>");
 	init_map(&map, argv[1]);
 	parse_map(&map, argv[1]);
 	data.map = &map;
