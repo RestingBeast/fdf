@@ -6,7 +6,7 @@
 /*   By: kkhant-z <kkhant-z@student.42singapore.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 05:32:09 by kkhant-z          #+#    #+#             */
-/*   Updated: 2026/05/18 20:51:44 by kkhant-z         ###   ########.fr       */
+/*   Updated: 2026/05/18 21:06:02 by kkhant-z         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	set_width_and_height(t_map *map, char *mapfile)
 	}
 	free(line);
 	close(fd);
+	if (map->width == 0 || map->height == 0)
+		fatal_error("Empty map");
 }
 
 void	map_error(t_map *map, char **content, char *message, int fd)

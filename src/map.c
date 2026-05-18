@@ -6,7 +6,7 @@
 /*   By: kkhant-z <kkhant-z@student.42singapore.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 05:32:48 by kkhant-z          #+#    #+#             */
-/*   Updated: 2026/05/18 20:52:05 by kkhant-z         ###   ########.fr       */
+/*   Updated: 2026/05/18 21:04:19 by kkhant-z         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void	parse_map(t_map *map, char *mapfile)
 		replace_new_line(line);
 		content = ft_split(line, ' ');
 		free(line);
+		if (!content)
+			map_error(map, NULL, "malloc failed: ft_split", fd);
 		process_line(map, content, fd);
 		free_2d_arr((void **)content);
 		line = get_next_line(fd);
