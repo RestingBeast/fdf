@@ -43,7 +43,6 @@ static float	compute_scale(t_map *map)
 	float	scale_w;
 	float	scale_h;
 
-	// Scale the grid so it fills exactly 70% of the window width/height
 	scale_w = (WIN_W * 0.70f) / ((map->width + map->height) * 0.866025f);
 	scale_h = (WIN_H * 0.70f) / ((map->width + map->height) * 0.5f);
 	if (scale_w < scale_h)
@@ -63,10 +62,10 @@ static void	init_cam(t_data *data)
 		cam->z_scale = 1.0f;
 	else
 		cam->z_scale = (float)WIN_H / (z_range * 4);
-
-	// Corrected Math: Shifts the entire frame left/right/up/down based on the map's asymmetry
-	cam->x_off = (WIN_W / 2) - (((data->map->width - data->map->height) * 0.866025f * cam->scale) / 2);
-	cam->y_off = (WIN_H / 2) - (((data->map->width + data->map->height) * 0.5f * cam->scale) / 2);
+	cam->x_off = (WIN_W / 2) - (((data->map->width - data->map->height)
+				* 0.866025f * cam->scale) / 2);
+	cam->y_off = (WIN_H / 2) - (((data->map->width + data->map->height)
+				* 0.5f * cam->scale) / 2);
 }
 
 int	main(int argc, char **argv)

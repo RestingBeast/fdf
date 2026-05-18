@@ -97,6 +97,10 @@ char	*extract_z_index(char *str);
 
 /* render.c */
 void	render(t_data *data);
+/* render_utils.c */
+int		lerp_color(int c1, int c2, float t);
+t_point	project(t_data *data, int x, int y);
+void	init_line(t_line *l, t_point a, t_point b);
 
 /* utils.c */
 void	free_2d_arr(void **arr);

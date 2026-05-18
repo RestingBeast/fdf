@@ -16,6 +16,7 @@ SRC = src/fdf.c \
 	  src/map_utils.c \
 	  src/utils.c \
 	  src/render.c \
+	  src/render_utils.c \
 	  $(GNL_DIR)/get_next_line.c \
 	  $(GNL_DIR)/get_next_line_utils.c 
 OBJ = $(SRC:.c=.o)
@@ -23,7 +24,7 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(FTPRINTF) $(OBJ) $(MINILIBX)
-	$(CC) $(CFLAGS) -o $@ $(OBJ) $(FTPRINTF) $(MINILIBX) -lXext -lX11
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(FTPRINTF) $(MINILIBX) -lXext -lX11 -lm
 
 $(FTPRINTF):
 	$(MAKE) -C $(FTPRINTF_DIR)
